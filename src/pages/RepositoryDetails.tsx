@@ -1,9 +1,9 @@
-
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Star, GitFork, Eye, BookOpen, History, Users } from "lucide-react";
 import { Navbar } from "@/components/layout/Navbar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 // Mock data for demonstration
 const repository = {
@@ -14,7 +14,32 @@ const repository = {
   watchers: 1523,
   language: "TypeScript",
   lastUpdated: "2 days ago",
-  contributors: 2943,
+  contributors: [
+    { username: "tim", name: "Tim", avatar: "https://github.com/timothee.png" },
+    { username: "lee", name: "Lee Robinson", avatar: "https://github.com/leerob.png" },
+    { username: "steven", name: "Steven", avatar: "https://github.com/steven.png" },
+    { username: "michael", name: "Michael", avatar: "https://github.com/michael.png" },
+  ],
+  relatedProjects: [
+    {
+      name: "remix",
+      description: "Full stack web framework",
+      stars: 24150,
+      language: "TypeScript"
+    },
+    {
+      name: "gatsby",
+      description: "Build blazing fast websites",
+      stars: 54321,
+      language: "TypeScript"
+    },
+    {
+      name: "astro",
+      description: "The all-in-one web framework",
+      stars: 34567,
+      language: "TypeScript"
+    }
+  ],
   readme: `# Next.js
 
   The React Framework for Production...
@@ -25,7 +50,8 @@ const repository = {
   ## Documentation
   Visit [https://nextjs.org/docs](https://nextjs.org/docs) to view the full documentation.`,
   techStack: ["React", "TypeScript", "Node.js", "Webpack"],
-  license: "MIT"
+  license: "MIT",
+  contributorsCount: 2943
 };
 
 const RepositoryDetails = () => {
@@ -119,7 +145,7 @@ const RepositoryDetails = () => {
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm text-muted-foreground">Contributors</span>
-                      <span className="text-sm">{repository.contributors}</span>
+                      <span className="text-sm">{repository.contributors.length}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm text-muted-foreground">License</span>
@@ -138,6 +164,63 @@ const RepositoryDetails = () => {
               <CardContent>
                 <div className="prose prose-sm max-w-none">
                   <pre className="whitespace-pre-wrap">{repository.readme}</pre>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Contributors Section */}
+            <Card className="mb-8">
+              <CardHeader className="pb-2">
+                <h3 className="font-semibold flex items-center gap-2">
+                  <Users className="h-5 w-5" />
+                  Top Contributors
+                </h3>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-wrap gap-4">
+                  {repository.contributors.map((contributor) => (
+                    <div key={contributor.username} className="flex items-center gap-2">
+                      <Avatar className="h-8 w-8">
+                        <AvatarImage src={contributor.avatar} alt={contributor.name} />
+                        <AvatarFallback>{contributor.name[0]}</AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <p className="text-sm font-medium">{contributor.name}</p>
+                        <p className="text-xs text-muted-foreground">@{contributor.username}</p>
+                      </div>
+                    </div>
+                  ))}
+                  {repository.contributorsCount > repository.contributors.length && (
+                    <Button variant="ghost" className="text-sm text-muted-foreground">
+                      View all {repository.contributorsCount} contributors
+                    </Button>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Related Projects Section */}
+            <Card className="mb-8">
+              <CardHeader className="pb-2">
+                <h3 className="font-semibold">Related Projects</h3>
+              </CardHeader>
+              <CardContent>
+                <div className="grid gap-4">
+                  {repository.relatedProjects.map((project) => (
+                    <div key={project.name} className="flex items-center justify-between p-4 rounded-lg border">
+                      <div>
+                        <h4 className="font-medium">{project.name}</h4>
+                        <p className="text-sm text-muted-foreground">{project.description}</p>
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-1">
+                          <Star className="h-4 w-4" />
+                          <span className="text-sm">{project.stars}</span>
+                        </div>
+                        <Badge variant="secondary">{project.language}</Badge>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </CardContent>
             </Card>
