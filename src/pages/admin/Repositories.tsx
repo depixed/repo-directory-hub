@@ -1,5 +1,4 @@
 
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -7,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Plus } from "lucide-react";
+import { AddRepositoryDialog } from "@/components/admin/AddRepositoryDialog";
 
 export default function Repositories() {
   return (
@@ -19,10 +18,7 @@ export default function Repositories() {
             Manage and moderate repository submissions
           </p>
         </div>
-        <Button>
-          <Plus className="mr-2" />
-          Add Repository
-        </Button>
+        <AddRepositoryDialog />
       </div>
 
       <div className="grid gap-4">
