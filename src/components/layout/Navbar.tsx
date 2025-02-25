@@ -13,9 +13,11 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { SignInButton, SignUpButton, UserButton, useAuth } from "@clerk/clerk-react";
 
 export function Navbar() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const { isSignedIn } = useAuth();
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 glass border-b">
@@ -71,6 +73,19 @@ export function Navbar() {
             >
               {isSearchOpen ? <X className="h-5 w-5" /> : <Search className="h-5 w-5" />}
             </Button>
+
+            {isSignedIn ? (
+              <UserButton afterSignOutUrl="/" />
+            ) : (
+              <div className="flex items-center gap-2">
+                <SignInButton mode="modal">
+                  <Button variant="ghost" size="sm">Sign in</Button>
+                </SignInButton>
+                <SignUpButton mode="modal">
+                  <Button size="sm">Sign up</Button>
+                </SignUpButton>
+              </div>
+            )}
 
             <Button variant="outline" size="icon">
               <Github className="h-5 w-5" />
