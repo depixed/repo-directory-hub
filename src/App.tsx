@@ -10,6 +10,8 @@ import NotFound from "./pages/NotFound";
 import { ProtectedRoute } from "./components/auth/ProtectedRoute";
 import { AdminLayout } from "./components/layout/AdminLayout";
 import Repositories from "./pages/admin/Repositories";
+import Categories from "./pages/admin/Categories";
+import TechStacks from "./pages/admin/TechStacks";
 
 const queryClient = new QueryClient();
 
@@ -32,8 +34,8 @@ const App = () => (
           {/* Admin routes */}
           <Route path="/admin" element={<AdminLayout />}>
             <Route path="repositories" element={<Repositories />} />
-            <Route path="categories" element={<div>Categories - Coming soon</div>} />
-            <Route path="tech-stacks" element={<div>Tech Stacks - Coming soon</div>} />
+            <Route path="categories" element={<Categories />} />
+            <Route path="tech-stacks" element={<TechStacks />} />
             <Route path="users" element={<div>Users - Coming soon</div>} />
           </Route>
           <Route path="*" element={<NotFound />} />
