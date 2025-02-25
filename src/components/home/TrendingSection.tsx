@@ -1,5 +1,7 @@
 
+import { useState } from "react";
 import { RepoCard } from "./RepoCard";
+import { ViewToggle } from "./ViewToggle";
 
 const TRENDING_REPOS = [
   {
@@ -26,11 +28,20 @@ const TRENDING_REPOS = [
 ];
 
 export function TrendingSection() {
+  const [view, setView] = useState<"grid" | "list">("grid");
+
   return (
     <section className="py-16">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold mb-8">Trending Repositories</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-3xl font-bold">Trending Repositories</h2>
+          <ViewToggle view={view} onViewChange={setView} />
+        </div>
+        <div className={`grid gap-6 ${
+          view === "grid" 
+            ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" 
+            : "grid-cols-1"
+        }`}>
           {TRENDING_REPOS.map((repo) => (
             <RepoCard key={repo.name} {...repo} />
           ))}

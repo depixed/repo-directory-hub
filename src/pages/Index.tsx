@@ -2,6 +2,8 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { Hero } from "@/components/home/Hero";
 import { TrendingSection } from "@/components/home/TrendingSection";
+import { CategorySection } from "@/components/home/CategorySection";
+import { TechStackSection } from "@/components/home/TechStackSection";
 
 const Index = () => {
   return (
@@ -10,6 +12,8 @@ const Index = () => {
       <main className="pt-16">
         <Hero />
         <TrendingSection />
+        <CategorySection />
+        <TechStackSection />
       </main>
     </div>
   );
