@@ -23,6 +23,9 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          {/* Public routes */}
+          <Route path="/categories" element={<Categories />} />
+          <Route path="/tech-stacks" element={<TechStacks />} />
           <Route 
             path="/repository/:id" 
             element={

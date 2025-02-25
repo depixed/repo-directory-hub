@@ -7,6 +7,8 @@ import {
   Search,
   Menu,
   X,
+  LayoutGrid,
+  Layers,
 } from "lucide-react";
 import {
   Sheet,
@@ -14,6 +16,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { SignInButton, SignUpButton, UserButton, useAuth } from "@clerk/clerk-react";
+import { Link } from "react-router-dom";
 
 export function Navbar() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -33,26 +36,40 @@ export function Navbar() {
               <SheetContent side="left">
                 <nav className="flex flex-col gap-4">
                   <a href="#trending" className="text-lg font-medium">Trending</a>
-                  <a href="#categories" className="text-lg font-medium">Categories</a>
-                  <a href="#tech-stacks" className="text-lg font-medium">Tech Stacks</a>
+                  <Link to="/categories" className="text-lg font-medium flex items-center gap-2">
+                    <LayoutGrid className="h-4 w-4" />
+                    Categories
+                  </Link>
+                  <Link to="/tech-stacks" className="text-lg font-medium flex items-center gap-2">
+                    <Layers className="h-4 w-4" />
+                    Tech Stacks
+                  </Link>
                 </nav>
               </SheetContent>
             </Sheet>
             
-            <a href="/" className="text-xl font-bold">
+            <Link to="/" className="text-xl font-bold">
               opensource.so
-            </a>
+            </Link>
             
             <nav className="hidden lg:flex items-center gap-6">
               <a href="#trending" className="text-sm font-medium hover:text-primary/80">
                 Trending
               </a>
-              <a href="#categories" className="text-sm font-medium hover:text-primary/80">
+              <Link 
+                to="/categories" 
+                className="text-sm font-medium hover:text-primary/80 flex items-center gap-2"
+              >
+                <LayoutGrid className="h-4 w-4" />
                 Categories
-              </a>
-              <a href="#tech-stacks" className="text-sm font-medium hover:text-primary/80">
+              </Link>
+              <Link 
+                to="/tech-stacks" 
+                className="text-sm font-medium hover:text-primary/80 flex items-center gap-2"
+              >
+                <Layers className="h-4 w-4" />
                 Tech Stacks
-              </a>
+              </Link>
             </nav>
           </div>
 
