@@ -18,7 +18,9 @@ export const useAdmin = () => {
 
       try {
         const { data, error } = await supabase
-          .rpc('is_admin', { user_id: userId });
+          .rpc('is_admin', { 
+            user_id: userId as string 
+          });
 
         if (error) {
           console.error('Error checking admin status:', error);
