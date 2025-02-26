@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,6 +11,7 @@ import {
   Sun,
   Moon,
   Laptop,
+  Settings,
 } from "lucide-react";
 import {
   Sheet,
@@ -27,12 +27,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useAdmin } from "@/hooks/useAdmin";
 
 export function Navbar() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const { isSignedIn } = useAuth();
   const { setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const { isAdmin } = useAdmin();
 
   useEffect(() => {
     setMounted(true);
@@ -60,6 +62,12 @@ export function Navbar() {
                     <Layers className="h-4 w-4" />
                     Tech Stacks
                   </Link>
+                  {isAdmin && (
+                    <Link to="/admin" className="text-lg font-medium flex items-center gap-2">
+                      <Settings className="h-4 w-4" />
+                      Admin
+                    </Link>
+                  )}
                 </nav>
               </SheetContent>
             </Sheet>
@@ -134,7 +142,17 @@ export function Navbar() {
             )}
 
             {isSignedIn ? (
-              <UserButton afterSignOutUrl="/" />
+              <div className="flex items-center gap-4">
+                {isAdmin && (
+                  <Button variant="ghost" size="sm" asChild>
+                    <Link to="/admin">
+                      <Settings className="h-4 w-4 mr-2" />
+                      Admin
+                    </Link>
+                  </Button>
+                )}
+                <UserButton afterSignOutUrl="/" />
+              </div>
             ) : (
               <div className="flex items-center gap-2">
                 <SignInButton mode="modal">

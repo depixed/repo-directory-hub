@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useAuth } from "@clerk/clerk-react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
@@ -11,7 +10,8 @@ import {
   List,
   ChevronLast,
   ChevronFirst,
-  Home
+  Home,
+  Loader2
 } from "lucide-react";
 import { UserButton } from "@clerk/clerk-react";
 import {
@@ -20,17 +20,27 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
+import { useAdmin } from "@/hooks/useAdmin";
 
 export function AdminLayout() {
   const { isSignedIn, isLoaded } = useAuth();
+  const { isAdmin, loading } = useAdmin();
   const [expanded, setExpanded] = useState(true);
   const location = useLocation();
 
-  if (!isLoaded) {
-    return null;
+  if (!isLoaded || loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    );
   }
 
   if (!isSignedIn) {
+    return <Navigate to="/" replace />;
+  }
+
+  if (!isAdmin) {
     return <Navigate to="/" replace />;
   }
 
