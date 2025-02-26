@@ -1,7 +1,7 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@clerk/clerk-react";
-import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { Navigate, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { 
   ChevronRight, 
@@ -22,17 +22,29 @@ import {
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { useAdmin } from "@/hooks/useAdmin";
+import { useToast } from "@/components/ui/use-toast";
 
 export function AdminLayout() {
-  const { isSignedIn, isLoaded, userId } = useAuth();
-  const { isAdmin, loading } = useAdmin();
+  const { isSignedIn, isLoaded } = useAuth();
+  const { isAdmin, loading: adminLoading } = useAdmin();
   const [expanded, setExpanded] = useState(true);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
-  console.log('Auth State:', { isSignedIn, isLoaded, userId });
-  console.log('Admin State:', { isAdmin, loading });
+  // Effect to handle unauthorized access
+  useEffect(() => {
+    if (isLoaded && !adminLoading && !isAdmin) {
+      toast({
+        title: "Unauthorized",
+        description: "You don't have permission to access this area",
+        variant: "destructive",
+      });
+      navigate('/');
+    }
+  }, [isLoaded, adminLoading, isAdmin, navigate, toast]);
 
-  if (!isLoaded || loading) {
+  if (!isLoaded || adminLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin" />
@@ -41,12 +53,10 @@ export function AdminLayout() {
   }
 
   if (!isSignedIn) {
-    console.log('User not signed in, redirecting to home');
     return <Navigate to="/" replace />;
   }
 
   if (!isAdmin) {
-    console.log('User not admin, redirecting to home');
     return <Navigate to="/" replace />;
   }
 
