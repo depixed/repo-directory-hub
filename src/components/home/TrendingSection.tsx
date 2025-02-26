@@ -33,7 +33,7 @@ export function TrendingSection() {
   return (
     <section className="py-16">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between mb-8 fade-in-up" style={{ animationDelay: '0.1s' }}>
           <h2 className="text-3xl font-bold">Trending Repositories</h2>
           <ViewToggle view={view} onViewChange={setView} />
         </div>
@@ -42,8 +42,14 @@ export function TrendingSection() {
             ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" 
             : "grid-cols-1"
         }`}>
-          {TRENDING_REPOS.map((repo) => (
-            <RepoCard key={repo.name} {...repo} />
+          {TRENDING_REPOS.map((repo, index) => (
+            <div
+              key={repo.name}
+              className="fade-in-up"
+              style={{ animationDelay: `${0.2 + index * 0.1}s` }}
+            >
+              <RepoCard {...repo} />
+            </div>
           ))}
         </div>
       </div>

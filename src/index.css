@@ -68,3 +68,17 @@
 .glass {
   @apply bg-background/80 backdrop-blur-sm border-border;
 }
+
+/* Animation Classes */
+.fade-in-up {
+  @apply opacity-0 translate-y-4 animate-[fadeIn_0.6s_ease-out_forwards];
+}
+
+.hover-shadow {
+  @apply transition-all duration-300 hover:shadow-lg hover:shadow-foreground/5;
+}
+
+.card-hover {
+  @apply transition-all duration-300 hover:shadow-lg hover:shadow-foreground/5 hover:-translate-y-1;
+}
+

@@ -15,7 +15,7 @@ interface RepoCardProps {
 export function RepoCard({ name, description, stars, forks, language }: RepoCardProps) {
   return (
     <Link to={`/repository/${name}`}>
-      <Card className="card-hover">
+      <Card className="card-hover h-full">
         <CardHeader>
           <CardTitle className="text-lg">{name}</CardTitle>
         </CardHeader>
