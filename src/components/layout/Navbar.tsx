@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,7 +20,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { SignInButton, SignUpButton, UserButton, useAuth } from "@clerk/clerk-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useTheme } from "next-themes";
 import {
   DropdownMenu,
@@ -34,11 +35,15 @@ export function Navbar() {
   const { isSignedIn } = useAuth();
   const { setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  const { isAdmin } = useAdmin();
+  const { isAdmin, loading } = useAdmin();
+  const navigate = useNavigate();
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  console.log("Navbar Auth State:", { isSignedIn });
+  console.log("Navbar Admin State:", { isAdmin, loading });
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 glass border-b">
