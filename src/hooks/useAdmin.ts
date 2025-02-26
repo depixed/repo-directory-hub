@@ -7,14 +7,14 @@ import { useToast } from '@/components/ui/use-toast';
 export const useAdmin = () => {
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
-  const { userId, isLoaded, isSignedIn } = useAuth();
+  const { userId, isLoaded } = useAuth();
   const { toast } = useToast();
 
   useEffect(() => {
     let isMounted = true;
 
     const checkAdminStatus = async () => {
-      if (!userId || !isLoaded || !isSignedIn) {
+      if (!userId || !isLoaded) {
         if (isMounted) {
           setIsAdmin(false);
           setLoading(false);
@@ -24,39 +24,23 @@ export const useAdmin = () => {
 
       try {
         const cleanUserId = userId.replace('user_', '');
-        console.log('Auth State:', { userId, isLoaded, isSignedIn });
-        console.log('Checking admin status for cleaned user ID:', cleanUserId);
+        console.log('Checking admin status for user:', userId);
+        console.log('Clean user ID (without prefix):', cleanUserId);
         
-        // First, verify the user exists in user_roles
-        const { data: roleData, error: roleError } = await supabase
-          .from('user_roles')
-          .select('role')
-          .eq('user_id', cleanUserId)
-          .single();
-
-        if (roleError) {
-          console.error('Error checking user_roles:', roleError);
-          if (isMounted) {
-            setIsAdmin(false);
-            toast({
-              title: "Error",
-              description: "Failed to verify user role",
-              variant: "destructive",
-            });
-          }
-          return;
-        }
-
-        // Then check admin status through RPC
-        const { data: adminStatus, error: adminError } = await supabase
+        const { data: adminStatus, error } = await supabase
           .rpc('is_admin', { 
-            user_id: cleanUserId
+            user_id: cleanUserId // Using the cleaned ID
           });
 
         if (!isMounted) return;
 
-        if (adminError) {
-          console.error('Error checking admin status:', adminError);
+        if (error) {
+          console.error('Error checking admin status:', error);
+          console.error('Error details:', {
+            message: error.message,
+            hint: error.hint,
+            details: error.details
+          });
           toast({
             title: "Error",
             description: "Failed to verify admin status",
@@ -65,12 +49,12 @@ export const useAdmin = () => {
           setIsAdmin(false);
         } else {
           console.log('Admin check result:', adminStatus);
-          console.log('Role data:', roleData);
+          console.log('SQL query executed successfully');
           setIsAdmin(!!adminStatus);
         }
       } catch (error) {
         if (!isMounted) return;
-        console.error('Unexpected error:', error);
+        console.error('Error checking admin status:', error);
         setIsAdmin(false);
       } finally {
         if (isMounted) {
@@ -79,12 +63,20 @@ export const useAdmin = () => {
       }
     };
 
-    checkAdminStatus();
+    // Only check admin status if we have a userId and auth is loaded
+    if (isLoaded) {
+      if (userId) {
+        checkAdminStatus();
+      } else {
+        setIsAdmin(false);
+        setLoading(false);
+      }
+    }
 
     return () => {
       isMounted = false;
     };
-  }, [userId, isLoaded, isSignedIn, toast]);
+  }, [userId, isLoaded, toast]);
 
   return { isAdmin, loading };
 };

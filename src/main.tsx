@@ -1,14 +1,13 @@
 
 import { createRoot } from 'react-dom/client';
-import { ClerkProvider, useAuth } from "@clerk/clerk-react";
+import { ClerkProvider } from "@clerk/clerk-react";
 import App from './App.tsx';
 import './index.css';
 
-// Make sure to set this in your .env file
-const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+const PUBLISHABLE_KEY = "pk_test_Y2VudHJhbC1iYXNpbGlzay02OC5jbGVyay5hY2NvdW50cy5kZXYk";
 
 if (!PUBLISHABLE_KEY) {
-  throw new Error("Missing Clerk Publishable Key. Add VITE_CLERK_PUBLISHABLE_KEY to your .env file");
+  throw new Error("Missing Clerk Publishable Key");
 }
 
 createRoot(document.getElementById("root")!).render(
