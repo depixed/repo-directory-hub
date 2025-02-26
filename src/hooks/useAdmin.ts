@@ -23,16 +23,24 @@ export const useAdmin = () => {
       }
 
       try {
+        const cleanUserId = userId.replace('user_', '');
         console.log('Checking admin status for user:', userId);
+        console.log('Clean user ID (without prefix):', cleanUserId);
+        
         const { data: adminStatus, error } = await supabase
           .rpc('is_admin', { 
-            user_id: userId.replace('user_', '') // Remove 'user_' prefix from Clerk ID
+            user_id: cleanUserId // Using the cleaned ID
           });
 
         if (!isMounted) return;
 
         if (error) {
           console.error('Error checking admin status:', error);
+          console.error('Error details:', {
+            message: error.message,
+            hint: error.hint,
+            details: error.details
+          });
           toast({
             title: "Error",
             description: "Failed to verify admin status",
@@ -41,6 +49,7 @@ export const useAdmin = () => {
           setIsAdmin(false);
         } else {
           console.log('Admin check result:', adminStatus);
+          console.log('SQL query executed successfully');
           setIsAdmin(!!adminStatus);
         }
       } catch (error) {
