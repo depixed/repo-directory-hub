@@ -16,9 +16,9 @@ export function AdminLayout() {
   }
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex bg-background">
       {/* Sidebar */}
-      <aside className="w-64 bg-secondary/10 border-r">
+      <aside className="w-64 border-r bg-card">
         <div className="p-6">
           <h2 className="text-lg font-semibold">Admin Panel</h2>
         </div>
@@ -51,7 +51,7 @@ export function AdminLayout() {
       </aside>
 
       {/* Main content */}
-      <main className="flex-1 p-8">
+      <main className="flex-1 p-8 bg-background">
         <Outlet />
       </main>
     </div>
