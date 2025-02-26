@@ -17,15 +17,17 @@ export const useAdmin = () => {
       }
 
       try {
+        console.log('Checking admin status for user:', userId);
         const { data, error } = await supabase
           .rpc('is_admin', { 
-            user_id: userId as string 
+            user_id: userId
           });
 
         if (error) {
           console.error('Error checking admin status:', error);
           setIsAdmin(false);
         } else {
+          console.log('Admin check result:', data);
           setIsAdmin(!!data);
         }
       } catch (error) {
