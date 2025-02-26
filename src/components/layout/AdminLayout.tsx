@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useAuth } from "@clerk/clerk-react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
@@ -23,10 +24,13 @@ import { cn } from "@/lib/utils";
 import { useAdmin } from "@/hooks/useAdmin";
 
 export function AdminLayout() {
-  const { isSignedIn, isLoaded } = useAuth();
+  const { isSignedIn, isLoaded, userId } = useAuth();
   const { isAdmin, loading } = useAdmin();
   const [expanded, setExpanded] = useState(true);
   const location = useLocation();
+
+  console.log('Auth State:', { isSignedIn, isLoaded, userId });
+  console.log('Admin State:', { isAdmin, loading });
 
   if (!isLoaded || loading) {
     return (
@@ -37,10 +41,12 @@ export function AdminLayout() {
   }
 
   if (!isSignedIn) {
+    console.log('User not signed in, redirecting to home');
     return <Navigate to="/" replace />;
   }
 
   if (!isAdmin) {
+    console.log('User not admin, redirecting to home');
     return <Navigate to="/" replace />;
   }
 
