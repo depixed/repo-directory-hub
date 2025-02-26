@@ -9,110 +9,7 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      categories: {
-        Row: {
-          created_at: string
-          description: string | null
-          id: number
-          name: string
-        }
-        Insert: {
-          created_at?: string
-          description?: string | null
-          id?: number
-          name: string
-        }
-        Update: {
-          created_at?: string
-          description?: string | null
-          id?: number
-          name?: string
-        }
-        Relationships: []
-      }
-      repositories: {
-        Row: {
-          category_id: number | null
-          created_at: string
-          description: string | null
-          id: number
-          name: string
-          stars: number | null
-          tech_stack_ids: number[] | null
-          url: string
-        }
-        Insert: {
-          category_id?: number | null
-          created_at?: string
-          description?: string | null
-          id?: number
-          name: string
-          stars?: number | null
-          tech_stack_ids?: number[] | null
-          url: string
-        }
-        Update: {
-          category_id?: number | null
-          created_at?: string
-          description?: string | null
-          id?: number
-          name?: string
-          stars?: number | null
-          tech_stack_ids?: number[] | null
-          url?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "repositories_category_id_fkey"
-            columns: ["category_id"]
-            isOneToOne: false
-            referencedRelation: "categories"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      tech_stacks: {
-        Row: {
-          created_at: string
-          description: string | null
-          id: number
-          name: string
-        }
-        Insert: {
-          created_at?: string
-          description?: string | null
-          id?: number
-          name: string
-        }
-        Update: {
-          created_at?: string
-          description?: string | null
-          id?: number
-          name?: string
-        }
-        Relationships: []
-      }
-      user_roles: {
-        Row: {
-          created_at: string
-          id: string
-          role: Database["public"]["Enums"]["user_role"]
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          role?: Database["public"]["Enums"]["user_role"]
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          role?: Database["public"]["Enums"]["user_role"]
-          user_id?: string
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Views: {
       [_ in never]: never
@@ -126,7 +23,7 @@ export type Database = {
       }
     }
     Enums: {
-      user_role: "admin" | "user"
+      [_ in never]: never
     }
     CompositeTypes: {
       [_ in never]: never
