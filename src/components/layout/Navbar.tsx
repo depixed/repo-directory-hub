@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -9,6 +9,8 @@ import {
   X,
   LayoutGrid,
   Layers,
+  Sun,
+  Moon,
 } from "lucide-react";
 import {
   Sheet,
@@ -17,10 +19,18 @@ import {
 } from "@/components/ui/sheet";
 import { SignInButton, SignUpButton, UserButton, useAuth } from "@clerk/clerk-react";
 import { Link } from "react-router-dom";
+import { useTheme } from "next-themes";
 
 export function Navbar() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const { isSignedIn } = useAuth();
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  // Ensure theme toggle only renders after mounting to avoid hydration mismatch
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 glass border-b">
@@ -90,6 +100,21 @@ export function Navbar() {
             >
               {isSearchOpen ? <X className="h-5 w-5" /> : <Search className="h-5 w-5" />}
             </Button>
+
+            {mounted && (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                className="mr-2"
+              >
+                {theme === "dark" ? (
+                  <Sun className="h-5 w-5" />
+                ) : (
+                  <Moon className="h-5 w-5" />
+                )}
+              </Button>
+            )}
 
             {isSignedIn ? (
               <UserButton afterSignOutUrl="/" />
