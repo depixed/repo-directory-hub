@@ -9,16 +9,175 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      categories: {
+        Row: {
+          count: number | null
+          created_at: string
+          description: string | null
+          icon: string | null
+          id: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          count?: number | null
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          count?: number | null
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      repositories: {
+        Row: {
+          category_id: string | null
+          created_at: string
+          description: string | null
+          github_stars: number | null
+          id: string
+          is_approved: boolean | null
+          name: string
+          submitter_id: string | null
+          updated_at: string
+          url: string
+        }
+        Insert: {
+          category_id?: string | null
+          created_at?: string
+          description?: string | null
+          github_stars?: number | null
+          id?: string
+          is_approved?: boolean | null
+          name: string
+          submitter_id?: string | null
+          updated_at?: string
+          url: string
+        }
+        Update: {
+          category_id?: string | null
+          created_at?: string
+          description?: string | null
+          github_stars?: number | null
+          id?: string
+          is_approved?: boolean | null
+          name?: string
+          submitter_id?: string | null
+          updated_at?: string
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "repositories_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      repository_tech_stacks: {
+        Row: {
+          id: string
+          repository_id: string
+          tech_stack_id: string
+        }
+        Insert: {
+          id?: string
+          repository_id: string
+          tech_stack_id: string
+        }
+        Update: {
+          id?: string
+          repository_id?: string
+          tech_stack_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "repository_tech_stacks_repository_id_fkey"
+            columns: ["repository_id"]
+            isOneToOne: false
+            referencedRelation: "repositories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "repository_tech_stacks_tech_stack_id_fkey"
+            columns: ["tech_stack_id"]
+            isOneToOne: false
+            referencedRelation: "tech_stacks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tech_stacks: {
+        Row: {
+          count: number | null
+          created_at: string
+          icon: string | null
+          id: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          count?: number | null
+          created_at?: string
+          icon?: string | null
+          id?: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          count?: number | null
+          created_at?: string
+          icon?: string | null
+          id?: string
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_admin: {
+        Args: {
+          user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "moderator" | "user"
     }
     CompositeTypes: {
       [_ in never]: never

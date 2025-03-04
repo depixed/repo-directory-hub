@@ -29,7 +29,7 @@ export const useAdmin = () => {
         
         const { data: adminStatus, error } = await supabase
           .rpc('is_admin', { 
-            user_id: cleanUserId // Using the cleaned ID
+            user_id: cleanUserId
           });
 
         if (!isMounted) return;
@@ -49,7 +49,6 @@ export const useAdmin = () => {
           setIsAdmin(false);
         } else {
           console.log('Admin check result:', adminStatus);
-          console.log('SQL query executed successfully');
           setIsAdmin(!!adminStatus);
         }
       } catch (error) {

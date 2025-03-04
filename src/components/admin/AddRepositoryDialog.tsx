@@ -12,11 +12,14 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { Plus, Upload } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@clerk/clerk-react";
 
 export function AddRepositoryDialog() {
   const [urls, setUrls] = useState("");
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+  const { userId } = useAuth();
 
   const handleAddRepositories = async () => {
     setLoading(true);
@@ -32,18 +35,67 @@ export function AddRepositoryDialog() {
         return;
       }
 
-      // TODO: Implement GitHub API integration
-      console.log("Processing URLs:", urlList);
-      
-      toast({
-        title: "Success",
-        description: `Added ${urlList.length} repositories successfully`,
-      });
-      setUrls("");
+      // Process each repository URL
+      const results = await Promise.all(
+        urlList.map(async (url) => {
+          // Basic validation for GitHub URL format
+          if (!url.includes('github.com')) {
+            return { url, success: false, error: 'Not a valid GitHub URL' };
+          }
+
+          // Extract repo name from URL
+          // Format: https://github.com/owner/repo
+          const urlParts = url.split('/');
+          const repoName = urlParts[urlParts.length - 1] || 'Unknown Repository';
+          
+          // Insert repository into database
+          const { data, error } = await supabase
+            .from('repositories')
+            .insert({
+              name: repoName,
+              url: url.trim(),
+              submitter_id: userId ? userId.replace('user_', '') : null,
+              is_approved: false // Requires admin approval
+            });
+
+          if (error) {
+            console.error('Error adding repository:', error);
+            return { url, success: false, error: error.message };
+          }
+
+          return { url, success: true };
+        })
+      );
+
+      // Count successful and failed submissions
+      const successful = results.filter(r => r.success).length;
+      const failed = results.length - successful;
+
+      // Show appropriate toast based on results
+      if (successful > 0 && failed === 0) {
+        toast({
+          title: "Success",
+          description: `Added ${successful} repositories successfully. They will be reviewed by an admin.`,
+        });
+        setUrls(""); // Clear the textarea on success
+      } else if (successful > 0 && failed > 0) {
+        toast({
+          title: "Partial Success",
+          description: `Added ${successful} repositories. ${failed} failed to add.`,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: "Failed to add repositories. Please try again.",
+          variant: "destructive",
+        });
+      }
     } catch (error) {
+      console.error('Unexpected error:', error);
       toast({
         title: "Error",
-        description: "Failed to add repositories",
+        description: "An unexpected error occurred. Please try again.",
         variant: "destructive",
       });
     } finally {
